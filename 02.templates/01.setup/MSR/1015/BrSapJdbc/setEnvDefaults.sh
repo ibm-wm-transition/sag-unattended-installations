@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Section 0 - Framework Import
-if [ ! "`type -t urlencode`X" == "functionX" ]; then
+if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
     if [ ! -f "${SUIF_CACHE_HOME}/installationScripts/commonFunctions.sh" ]; then
         echo "Panic, common functions not sourced and not present locally! Cannot continue"
         exit 100

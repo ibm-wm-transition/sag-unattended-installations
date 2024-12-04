@@ -25,7 +25,7 @@ if [ -d "${SUIF_SUM_HOME}/bin/UpdateManager/conf " ];then
     logI "UpdateManager already present, skipping installation..."
 else
     # Parameters - bootstrapSum
-    # $1 - Update Manager Boostrap file
+    # $1 - Update Manager Bootstrap file
     # $2 - Fixes image file, mandatory for offline mode
     # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
     bootstrapSum "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" "" "${SUIF_SUM_HOME}" 

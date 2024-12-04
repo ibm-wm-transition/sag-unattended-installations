@@ -46,7 +46,7 @@ assureVariables
 
 checkEmpowerCredentials    || logW "Provided Empower credentials are incorrect!"
 assureDefaultInstaller     || logW "Default installer not assured! Eventually clean the output folder."
-assureDefaultSumBoostrap   || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
+assureDefaultSumBootstrap   || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
 
 logI "Installing Update Manager..."
 # mkdir -p "${SUIF_SUM_HOME}"

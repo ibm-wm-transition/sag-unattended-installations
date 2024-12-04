@@ -7,6 +7,7 @@
 # Dependency
 if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
   echo "sourcing commonFunctions.sh ..."
+  SUIF_CACHE_HOME=${SUIF_CACHE_HOME:-${SUIF_HOME}}
   if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
     echo "Panic, framework issue! File ${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh does not exist. SUIF_CACHE_HOME=${SUIF_CACHE_HOME}"
     exit 155
@@ -48,7 +49,7 @@ export SUIF_SDC_ONLINE_MODE="${SUIF_SDC_ONLINE_MODE:-0}" # default if offline fo
 # Parameters - installProducts
 # $1 - installer binary file
 # $2 - script file for installer
-# $3 - OPIONAL: debugLevel for installer
+# $3 - OPTIONAL: debugLevel for installer
 installProducts() {
 
   if [ ! -f "${1}" ]; then
@@ -104,12 +105,12 @@ installProducts() {
 }
 
 # Parameters - bootstrapSum
-# $1 - Update Manager Boostrap file
+# $1 - Update Manager Bootstrap file
 # $2 - Fixes image file, mandatory for offline mode
-# $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+# $3 - OPTIONAL Where to install (SUM Home), default /opt/sag/sum
 bootstrapSum() {
   if [ ! -f "${1}" ]; then
-    logE "[setupFunctions.sh:bootstrapSum()] - Software AG Update Manager boostrap file not found: ${1}"
+    logE "[setupFunctions.sh:bootstrapSum()] - Software AG Update Manager bootstrap file not found: ${1}"
     return 1
   fi
 
@@ -145,14 +146,14 @@ bootstrapSum() {
   if [ ${RESULT_controlledExec} -eq 0 ]; then
     logI "[setupFunctions.sh:bootstrapSum()] - SUM Bootstrap successful"
   else
-    logE "[setupFunctions.sh:bootstrapSum()] - SUM Boostrap failed, code ${RESULT_controlledExec}"
+    logE "[setupFunctions.sh:bootstrapSum()] - SUM Bootstrap failed, code ${RESULT_controlledExec}"
     return 3
   fi
 }
 
 # Parameters - patchSum()
-# $1 - Fixes Image (this will allways happen offline in this framework)
-# $2 - OTPIONAL SUM Home, default /opt/sag/sum
+# $1 - Fixes Image (this will always happen offline in this framework)
+# $2 - OPTIONAL SUM Home, default /opt/sag/sum
 patchSum() {
   if [ "${SUIF_SDC_ONLINE_MODE}" -ne 0 ]; then
     logI "[setupFunctions.sh:patchSum()] - patchSum() ignored in online mode"
@@ -187,12 +188,12 @@ patchSum() {
 # Parameters - removeDiagnoserPatch
 # $1 - Engineering patch diagnoser key (e.g. "5437713_PIE-68082_5")
 # $2 - Engineering patch ids list (expected one id only, but we never know e.g. "5437713_PIE-68082_1.0.0.0005-0001")
-# $3 - OTPIONAL SUM Home, default /opt/sag/sum
-# $4 - OTPIONAL Products Home, default /opt/sag/products
+# $3 - OPTIONAL SUM Home, default /opt/sag/sum
+# $4 - OPTIONAL Products Home, default /opt/sag/products
 removeDiagnoserPatch() {
   local SUM_HOME="${3:-"/opt/sag/sum"}"
   if [ ! -f "${SUM_HOME}/bin/UpdateManagerCMD.sh" ]; then
-    logE "[setupFunctions.sh:removeDiagnoserPatch()] - Update manager not found at the inficated location ${SUM_HOME}"
+    logE "[setupFunctions.sh:removeDiagnoserPatch()] - Update manager not found at the indicated location ${SUM_HOME}"
     return 1
   fi
   local PRODUCTS_HOME="${4:-"/opt/sag/products"}"
@@ -252,11 +253,11 @@ removeDiagnoserPatch() {
 }
 
 # Parameters - patchInstallation
-# $1 - Fixes Image (this will allways happen offline in this framework)
-# $2 - OTPIONAL SUM Home, default /opt/sag/sum
-# $3 - OTPIONAL Products Home, default /opt/sag/products
-# $4 - OTPIONAL Engineering patch modifier (default "N")
-# $5 - OTPIONAL Engineering patch diagnoser key (default "5437713_PIE-68082_5", however user must provide if $4=Y)
+# $1 - Fixes Image (this will always happen offline in this framework)
+# $2 - OPTIONAL SUM Home, default /opt/sag/sum
+# $3 - OPTIONAL Products Home, default /opt/sag/products
+# $4 - OPTIONAL Engineering patch modifier (default "N")
+# $5 - OPTIONAL Engineering patch diagnoser key (default "5437713_PIE-68082_5", however user must provide if $4=Y)
 patchInstallation() {
   if [ ! -f "${1}" ]; then
     logE "[setupFunctions.sh:patchInstallation()] - Fixes image file not found: ${1}"
@@ -289,7 +290,7 @@ patchInstallation() {
   logI "[setupFunctions.sh:patchInstallation()] - Taking a snapshot of existing fixes..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
 
-  logI "[setupFunctions.sh:patchInstallation()] - Explictly patch SUM itself, if required..."
+  logI "[setupFunctions.sh:patchInstallation()] - Explicitly patch SUM itself, if required..."
   patchSum "${1}" "${SUM_HOME}"
 
   logI "[setupFunctions.sh:patchInstallation()] - Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
@@ -327,9 +328,9 @@ patchInstallation() {
 # Parameters - setupProductsAndFixes
 # $1 - Installer binary file
 # $2 - Script file for installer
-# $3 - Update Manager Boostrap file
-# $4 - Fixes Image (this will allways happen offline in this framework)
-# $5 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+# $3 - Update Manager Bootstrap file
+# $4 - Fixes Image (this will always happen offline in this framework)
+# $5 - OPTIONAL Where to install (SUM Home), default /opt/sag/sum
 # $6 - OPTIONAL: debugLevel for installer
 setupProductsAndFixes() {
 
@@ -391,7 +392,7 @@ setupProductsAndFixes() {
       # Parameters - installProducts
       # $1 - installer binary file
       # $2 - script file for installer
-      # $3 - OPIONAL: debugLevel for installer
+      # $3 - OPTIONAL: debugLevel for installer
       installProducts "${1}" "${2}" "${installerDebugLevel}"
       RESULT_installProducts=$?
       if [ ${RESULT_installProducts} -ne 0 ]; then
@@ -402,8 +403,8 @@ setupProductsAndFixes() {
         if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ]; then
 
           # Parameters - bootstrapSum
-          # $1 - Update Manager Boostrap file
-          # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+          # $1 - Update Manager Bootstrap file
+          # $2 - OPTIONAL Where to install (SUM Home), default /opt/sag/sum
           local lSumHome="${5:-/opt/sag/sum}"
           bootstrapSum "${3}" "${4}" "${lSumHome}"
           local RESULT_bootstrapSum=$?
@@ -412,9 +413,9 @@ setupProductsAndFixes() {
             RESULT_setupProductsAndFixes=9
           else
             # Parameters - patchInstallation
-            # $1 - Fixes Image (this will allways happen offline in this framework)
-            # $2 - OTPIONAL SUM Home, default /opt/sag/sum
-            # $3 - OTPIONAL Products Home, default /opt/sag/products
+            # $1 - Fixes Image (this will always happen offline in this framework)
+            # $2 - OPTIONAL SUM Home, default /opt/sag/sum
+            # $3 - OPTIONAL Products Home, default /opt/sag/products
             patchInstallation "${4}" "${lSumHome}" "${lInstallDir}"
             RESULT_patchInstallation=$?
             if [ ${RESULT_patchInstallation} -ne 0 ]; then
@@ -509,7 +510,7 @@ assureDownloadableFile() {
     fi
 
     if [ ! -f "${1}" ]; then
-      logE "[setupFunctions.sh:assureDownloadableFile()] - File ${1} waa not downloaded even if curl command succeded"
+      logE "[setupFunctions.sh:assureDownloadableFile()] - File ${1} waa not downloaded even if curl command succeeded"
       return 3
     fi
   fi
@@ -537,13 +538,13 @@ assureDefaultInstaller() {
 
 # Parameters
 # $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
-assureDefaultSumBoostrap() {
-  local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20231121-11-LinuxX86.bin"
-  local sumBoostrapSha256Sum="b4f2d131512255c60bd5246c07129cdcf653acfa6fecf34ce7e98f060e6ee26a"
+assureDefaultSumBootstrap() {
+  local sumBootstrapUrl="https://empowersdc.softwareag.com/ccinstallers/SAGUpdateManagerInstaller-linux_x86_64-11.0.0.0000-0823.bin"
+  local sumBootstrapSha256Sum="496ac3c833928e3a2a38fb12a6a80bc82277b45ad42e869fbbfdf105d6685d98"
   SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
   local lSumBootstrap="${1:-$SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
-  if ! assureDownloadableFile "${lSumBootstrap}" "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}"; then
-    logE "[setupFunctions.sh:assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
+  if ! assureDownloadableFile "${lSumBootstrap}" "${sumBootstrapUrl}" "${sumBootstrapSha256Sum}"; then
+    logE "[setupFunctions.sh:assureDefaultSumBootstrap()] - Cannot assure default sum bootstrap!"
     return 1
   fi
   chmod u+x "${lSumBootstrap}"
@@ -585,11 +586,11 @@ generateFixesImageFromTemplate() {
     local lSumBootstrapBin="${6:-/tmp/sum-bootstrap.bin}"
     if [ ! -f "${lSumBootstrapBin}" ]; then
       logW "[setupFunctions.sh:generateFixesImageFromTemplate()] - SUM Bootstrap binary not found, trying to obtain the default one..."
-      assureDefaultSumBoostrap "${lSumBootstrapBin}" || return $?
+      assureDefaultSumBootstrap "${lSumBootstrapBin}" || return $?
       # Parameters - bootstrapSum
-      # $1 - Update Manager Boostrap file
+      # $1 - Update Manager Bootstrap file
       # $2 - Fixes image file, mandatory for offline mode
-      # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+      # $3 - OPTIONAL Where to install (SUM Home), default /opt/sag/sum
       # NOTE: SUIF_SDC_ONLINE_MODE must be 1 (non 0)
       bootstrapSum "${lSumBootstrapBin}" '' "${lSumHome}" || return $?
     fi
@@ -761,7 +762,7 @@ generateProductsImageFromTemplate() {
   logI "[setupFunctions.sh:generateProductsImageFromTemplate()] - Volatile script created."
 
   ## TODO: check if error management enforcement is needed: what if the grep produced nothing?
-  ## TODO: dela with \ escaping in the password. For now avoid using '\' - backslash in the password string
+  ## TODO: deal with \ escaping in the password. For now avoid using '\' - backslash in the password string
 
   ## TODO: not space safe, but it shouldn't matter for now
   local lCmd="${lInstallerBin} -readScript ${lVolatileScriptFile}"
@@ -769,7 +770,7 @@ generateProductsImageFromTemplate() {
     lCmd="${lCmd} -debugFile '${lDebugLogFile}' -debugLvl verbose"
   fi
   lCmd="${lCmd} -writeImage ${lProductsImageFile}"
-  # explictly tell installer we are running unattended
+  # explicitly tell installer we are running unattended
   lCmd="${lCmd} -scriptErrorInteract no"
 
   # avoid downloading what we already have
@@ -913,5 +914,33 @@ setupFunctionsSourced(){
   return 0
 }
 
+# Parameters
+# $1 -> installation script
+extractProductListFromInstallationScript(){
+  if [ ! -f "${1}" ]; then
+    logE "[setupFunctions.sh:extractProductListFromInstallationScript()] - File ${1} does not exist!"
+    return 1
+  fi
+  grep 'InstallProducts' "${1}" | cut -d= -f2 | tr ',' '\n' | sort
+}
+
+# Parameters
+# $1 -> enumeration file (produced with the above function 'extractProductListFromInstallationScript')
+buildProductListLineFromEnumerationFile(){
+  if [ ! -f "${1}" ]; then
+    logE "[setupFunctions.sh:buildProductListLineFromEnumerationFile()] - File ${1} does not exist!"
+    return 1
+  fi
+  first="Yes"
+  while IFS= read -r line; do
+    if [ $first = "Yes" ] ; then
+      printf 'InstallProducts='
+      first="No"
+    else
+      printf ','
+    fi
+    printf '%s' "$line"
+  done < "${1}"
+}
+
 logI "[setupFunctions.sh] - Setup Functions sourced"
-  

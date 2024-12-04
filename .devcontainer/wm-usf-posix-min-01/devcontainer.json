@@ -1,0 +1,19 @@
+{
+    "build": {"dockerfile": "Dockerfile"},
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "adamvoss.vscode-languagetool-en",
+                "bierner.markdown-mermaid",
+                "bierner.markdown-preview-github-styles",
+                "eamodio.gitlens",
+                "hediet.vscode-drawio",
+                "mhutchie.git-graph",
+                "oderwat.indent-rainbow",
+                "streetsidesoftware.code-spell-checker",
+                "timonwong.shellcheck",
+                "yzhang.markdown-all-in-one"
+            ]
+        }
+    }
+}

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if [ ! "`type -t urlencode`X" == "functionX" ]; then
+if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
     if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
         echo "Panic, common functions not sourced and not present locally! Cannot continue"
-        exit 500
+        exit 244
     fi
     . "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
 fi
@@ -14,7 +14,7 @@ export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/path/to/instal
 export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
 
 ## Framework - Patch
-export SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-"/path/to/sum-boostrap.bin"}
+export SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-"/path/to/sum-bootstrap.bin"}
 export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
 
 ## Current Template

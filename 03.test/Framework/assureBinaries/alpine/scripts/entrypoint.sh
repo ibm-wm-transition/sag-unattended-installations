@@ -13,7 +13,7 @@ logEnv
 errNo=0
 
 assureDefaultInstaller || errNo=$((errNo+1))
-assureDefaultSumBoostrap || errNo=$((errNo+1))
+assureDefaultSumBootstrap || errNo=$((errNo+1))
 
 logI "Returning exit code $errNo"
 

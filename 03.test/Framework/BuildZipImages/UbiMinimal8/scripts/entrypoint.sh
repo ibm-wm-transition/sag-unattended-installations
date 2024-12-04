@@ -44,9 +44,13 @@ assureVariables
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh"
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh"
 
-checkEmpowerCredentials    || logW "Provided Empower credentials are incorrect!"
+if ! checkEmpowerCredentials 
+then
+  logW "Provided Empower credentials are incorrect!"
+  exit 101
+fi
 assureDefaultInstaller     || logW "Default installer not assured! Eventually clean the output folder."
-assureDefaultSumBoostrap   || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
+assureDefaultSumBootstrap   || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
 
 logI "Installing Update Manager..."
 # mkdir -p "${SUIF_SUM_HOME}"
