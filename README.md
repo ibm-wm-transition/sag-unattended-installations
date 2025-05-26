@@ -1,6 +1,10 @@
-# Software AG Unattended Installation Assets
+# Software AG Unattended Installation Assets - DISCONTINUED
 
-- [Software AG Unattended Installation Assets](#software-ag-unattended-installation-assets)
+Due to IBM's acquisition of webMethods and the fact this repo is built for the webMethods product, this repository is hereby frozen and will not receive any further increment.
+Expect this repository to be deleted from Software AG organization.
+
+
+- [Software AG Unattended Installation Assets - DISCONTINUED](#software-ag-unattended-installation-assets---discontinued)
   - [Folders](#folders)
     - [01.scripts](#01scripts)
     - [02.templates](#02templates)
